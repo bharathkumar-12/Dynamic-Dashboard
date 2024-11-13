@@ -1,10 +1,33 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
 import HelloWorld from "./components/HelloWorld.vue";
+import { Line } from 'vue-chartjs'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js'
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+)
+
 </script>
 
 <template>
-	<div class="h-screen bg-gray-900">
+	<div class="h-screen ">
+		
 		<div class="grid grid-cols-12 h-full">
 			<div class="col-span-1 w-[50px]">
 				<img
