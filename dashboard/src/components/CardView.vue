@@ -1,7 +1,8 @@
 <template>
 	<div
-		@click="showGraph(title)" 
-		class="bg-gray-600 min-w-[250px] hover:border-[0.5px] border-gray-300 max-w-[250px] rounded-sm cursor-pointer text-gray-400 p-2 text-xs grid gap-8"
+		@click="showGraph(title)"
+		:class="{ 'bg-cyan-800': title === store.graphTitle }"
+		class="bg-gray-600 min-w-[250px] hover:border-[0.5px] border-gray-300 lg:max-w-[250px] rounded-sm cursor-pointer text-gray-400 p-2 text-xs grid gap-8"
 	>
 		<div class="capitalize">
 			{{ title }}
@@ -40,29 +41,15 @@
 			</div>
 		</div>
 	</div>
-	<div
-		v-if="store.showGraph"
-		class="grid justify-items-center gap-2 absolute bg-[#2A3663] p-2 top-[130px]"
-	>
-		<div
-			@click="store.showGraph = false"
-			class="text-xs hover:bg-slate-500 cursor-pointer w-fit px-2 py-1 rounded-xl"
-		>
-			Close Graph View
-		</div>
-
-		<Line :data="chartData" class="p-4 w-[80vw] h-full" :options="options" />
-	</div>
 </template>
 <script setup>
-import { Line } from "vue-chartjs";
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, ref } from "vue";
 import { useCounterStore } from "@/stores/counter";
 const store = useCounterStore();
 const props = defineProps({
 	title: {
 		type: String,
-		default: "Cleavage Rate",
+		Required: true,
 	},
 	benchmark: {
 		type: String,
