@@ -2,7 +2,15 @@
 
 A modern, Apple-inspired dashboard application built with Vue.js and Tailwind CSS.
 
-![Dashboard Screenshot](screenshot.png)
+![screencapture-shimmering-babka-b3fff3-netlify-app-profile-2025-04-05-10_01_50](https://github.com/user-attachments/assets/4cc21729-2804-4eb7-bf7d-6e6e61687117)
+![screencapture-shimmering-babka-b3fff3-netlify-app-2025-04-05-10_05_31](https://github.com/user-attachments/assets/4bb40252-bd31-4887-946a-e8b8bd897366)
+
+![screencapture-shimmering-babka-b3fff3-netlify-app-planner-2025-04-05-10_01_24](https://github.com/user-attachments/assets/68dd2180-db0a-463e-b9f5-b1f76a187748)
+![screencapture-shimmering-babka-b3fff3-netlify-app-task-2025-04-05-10_01_36](https://github.com/user-attachments/assets/db2d11a5-bbdb-41ab-adff-f075ea7b82de)
+![screencapture-shimmering-babka-b3fff3-netlify-app-settings-2025-04-05-10_02_04](https://github.com/user-attachments/assets/fba9467d-3846-4899-b871-7a6f997d650e)
+![screencapture-shimmering-babka-b3fff3-netlify-app-2025-04-05-10_02_20](https://github.com/user-attachments/assets/2615256b-3118-4e5c-a673-04b148e5d0d2)
+
+
 
 ## 🌟 Features
 
