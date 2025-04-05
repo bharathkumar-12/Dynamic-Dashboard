@@ -41,7 +41,7 @@ const chartData = {
 		{
 			label: "ICSI Normal Fertilization Rate",
 			backgroundColor: "transparent",
-			borderColor: "#00d4d4",
+			borderColor: "#007AFF",
 			data: [
 				0,
 				0,
@@ -71,26 +71,39 @@ const chartData = {
 				60,
 				55,
 			],
-			borderWidth: 2,
-			pointBackgroundColor: "#00d4d4",
-			pointBorderColor: "#00d4d4",
+			borderWidth: 2.5,
+			pointBackgroundColor: "#007AFF",
+			pointBorderColor: "#FFFFFF",
+			pointBorderWidth: 2,
+			pointRadius: 4,
+			pointHoverRadius: 6,
+			tension: 0.4,
+			fill: true,
+			backgroundColor: (context) => {
+				const ctx = context.chart.ctx;
+				const gradient = ctx.createLinearGradient(0, 0, 0, context.chart.height);
+				gradient.addColorStop(0, 'rgba(0, 122, 255, 0.2)');
+				gradient.addColorStop(1, 'rgba(0, 122, 255, 0)');
+				return gradient;
+			}
 		},
 		{
 			label: "Benchmark ≥ 80%",
 			backgroundColor: "transparent",
-			borderColor: "#ffffff",
+			borderColor: "#98989D",
 			data: Array(27).fill(80),
 			pointRadius: 0,
-			borderWidth: 1,
+			borderWidth: 1.5,
+			borderDash: [4, 4]
 		},
 		{
 			label: "Competency ≥ 65%",
 			backgroundColor: "transparent",
-			borderColor: "#ff4b4b",
+			borderColor: "#FF3B30",
 			data: Array(27).fill(65),
 			pointRadius: 0,
-			borderDash: [5, 5],
-			borderWidth: 1,
+			borderDash: [4, 4],
+			borderWidth: 1.5
 		},
 	],
 };
@@ -223,29 +236,100 @@ function clearFilters() {
 				/>
 				<div
 					v-if="store.showGraph && store.graphTitle === item.title"
-					class="fixed inset-0 flex items-center justify-center bg-[#2A3663] bg-opacity-90 text-white z-50"
+					class="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-lg transition-all duration-300 text-gray-900 dark:text-white z-50"
 				>
 					<div
-						class="relative bg-[#1a2238] p-6 rounded-lg w-[80vw] h-[80vh] shadow-lg"
+						class="relative bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl p-8 rounded-3xl w-[90vw] h-[90vh] shadow-2xl border border-white/10 transition-all duration-300"
 					>
 						<!-- Header -->
-						<div
-							class="grid grid-flow-col grid-cols-2 justify-between w-full mb-4"
-						>
-							<div class="font-semibold">{{ store.graphTitle }}</div>
-							<div
-								@click="store.showGraph = false"
-								class="text-xs items-center justify-self-end hover:bg-slate-500 border-[0.5px] cursor-pointer w-fit px-2 py-1 rounded-xl"
-							>
-								Close Graph View
+						<div class="flex items-center justify-between w-full mb-8">
+							<div>
+								<h2 class="text-2xl font-semibold mb-2">{{ store.graphTitle }}</h2>
+								<p class="text-sm text-gray-500 dark:text-gray-400">Performance Metrics Over Time</p>
 							</div>
+							<button
+								@click="store.showGraph = false"
+								class="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-sm font-medium"
+							>
+								<font-awesome-icon :icon="['fas', 'xmark']" />
+								<span>Close</span>
+							</button>
 						</div>
 
-						<!-- Chart -->
-						<Line
-							:data="chartData"
-							class="lg:w-full lg:h-full h-[300px] w-[300px]"
-						/>
+						<!-- Chart Container -->
+						<div class="relative h-[calc(100%-7rem)] w-full bg-white/40 dark:bg-gray-800/40 rounded-2xl p-6 backdrop-blur-sm">
+							<Line
+								:data="chartData"
+								:options="{
+									responsive: true,
+									maintainAspectRatio: false,
+									interaction: {
+										intersect: false,
+										mode: 'index'
+									},
+									plugins: {
+										legend: {
+											position: 'top',
+											labels: {
+												font: {
+													family: 'SF Pro Display',
+													size: 12
+												},
+												padding: 20,
+												usePointStyle: true,
+												boxWidth: 6
+											}
+										},
+										tooltip: {
+											backgroundColor: 'rgba(255, 255, 255, 0.8)',
+											titleColor: '#1a1a1a',
+											bodyColor: '#1a1a1a',
+											borderColor: 'rgba(0, 0, 0, 0.1)',
+											borderWidth: 1,
+											padding: 12,
+											cornerRadius: 8,
+											titleFont: {
+												family: 'SF Pro Display',
+												size: 14,
+												weight: '600'
+											},
+											bodyFont: {
+												family: 'SF Pro Display',
+												size: 12
+											}
+										}
+									},
+									scales: {
+										x: {
+											grid: {
+												display: false
+											},
+											ticks: {
+												font: {
+													family: 'SF Pro Display',
+													size: 11
+												},
+												maxRotation: 45,
+												minRotation: 45
+											}
+										},
+										y: {
+											grid: {
+												color: 'rgba(0, 0, 0, 0.05)',
+												drawBorder: false
+											},
+											ticks: {
+												font: {
+													family: 'SF Pro Display',
+													size: 11
+												}
+											}
+										}
+									}
+								}"
+								class="w-full h-full"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>

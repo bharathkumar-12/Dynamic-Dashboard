@@ -1,50 +1,64 @@
 <template>
 	<div
-		@click="showGraph(title)"
-		:class="{ 'bg-cyan-800': title === store.graphTitle }"
-		class="bg-gray-600 min-w-[250px] hover:border-[0.5px] border-gray-300 lg:max-w-[250px] rounded-sm cursor-pointer text-gray-400 p-2 text-xs grid gap-8"
+		@click="showGraph(props.title)"
+		:class="[
+			'backdrop-blur-xl transition-all duration-300 min-w-[280px] lg:max-w-[280px] rounded-2xl cursor-pointer p-6 hover:scale-[1.02] hover:shadow-lg',
+			isActive ? 'bg-white/95 dark:bg-gray-800/95 shadow-lg' : 'bg-white/80 dark:bg-gray-900/80 shadow-md',
+		]"
 	>
-		<div class="capitalize">
-			{{ title }}
+		<!-- Card Header -->
+		<div class="flex items-start justify-between mb-6">
+			<h3 class="text-base font-medium truncate text-gray-900 dark:text-white capitalize">
+				{{ props.title }}
+			</h3>
+			<div v-if="benchmark && numerator && denominator" 
+				:class="[
+					'h-2 w-2 rounded-full mt-1.5',
+					getStatusColor
+				]"
+			></div>
 		</div>
-		<div>
-			<div
-				v-if="benchmark && numerator && denominator"
-				class="flex flex-row gap-2 items-end"
-			>
-				<div
-					v-if="value < 20"
-					class="h-[10px] w-[10px] rounded-full bg-green-400 mb-2"
-				></div>
-				<div
-					v-else-if="value >= 20 && value < 90"
-					class="h-[10px] w-[10px] rounded-full bg-yellow-400 mb-2"
-				></div>
-				<div
-					v-if="value >= 90"
-					class="h-[10px] w-[10px] rounded-full bg-red-400 mb-2"
-				></div>
-				<div class="text-4xl text-white leading-0">{{ value }}%</div>
-			</div>
-			<div v-else class="h-[40px]"></div>
-			<div
-				v-if="benchmark && numerator && denominator"
-				class="flex flex-row justify-between"
-			>
-				<div>BM {{ benchmark }}</div>
-				<div>
-					<span class="text-white">{{ numerator }}</span> / {{ denominator }}
+
+		<!-- Card Content -->
+		<div class="space-y-4">
+			<div v-if="benchmark && numerator && denominator">
+				<!-- Main Value -->
+				<div class="flex items-baseline gap-2">
+					<div class="text-4xl font-semibold tracking-tight text-gray-900 dark:text-white">
+						{{ value }}%
+					</div>
+					<div :class="[
+						'text-sm font-medium',
+						getTrendColor
+					]">
+						{{ getTrendIndicator }}
+					</div>
+				</div>
+
+				<!-- Benchmark & Stats -->
+				<div class="flex items-center justify-between text-sm">
+					<div class="text-gray-500 dark:text-gray-400">
+						BM {{ benchmark }}
+					</div>
+					<div>
+						<span class="font-medium text-gray-900 dark:text-white">{{ numerator }}</span>
+						<span class="text-gray-500 dark:text-gray-400"> / {{ denominator }}</span>
+					</div>
 				</div>
 			</div>
-			<div v-else>
-				<div class="text-cyan-400">Coming soon</div>
+			
+			<!-- Coming Soon State -->
+			<div v-else class="flex flex-col items-center justify-center py-4">
+				<div class="text-sm font-medium text-blue-600 dark:text-blue-400">Coming soon</div>
 			</div>
 		</div>
 	</div>
 </template>
+
 <script setup>
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useCounterStore } from "@/stores/counter";
+
 const store = useCounterStore();
 const props = defineProps({
 	title: {
@@ -65,104 +79,48 @@ const props = defineProps({
 	},
 });
 
+const isActive = computed(() => props.title === store.graphTitle);
+
 const value = computed(() => {
 	if (props.denominator === 0) {
-		return "N/A"; // Prevent division by zero
+		return "N/A";
 	}
 	const percentage = (props.numerator / props.denominator) * 100;
-	return percentage.toFixed(1); // Format to one decimal place
+	return percentage.toFixed(1);
 });
 
-const chartData = ref({
-	labels: [
-		"04 May 24",
-		"11 May 24",
-		"18 May 24",
-		"25 May 24",
-		"01 Jun 24",
-		"08 Jun 24",
-		"15 Jun 24",
-		"22 Jun 24",
-		"29 Jun 24",
-		"06 Jul 24",
-		"13 Jul 24",
-		"20 Jul 24",
-		"27 Jul 24",
-		"03 Aug 24",
-		"10 Aug 24",
-		"17 Aug 24",
-		"24 Aug 24",
-		"31 Aug 24",
-		"07 Sep 24",
-		"14 Sep 24",
-		"21 Sep 24",
-		"28 Sep 24",
-		"05 Oct 24",
-		"12 Oct 24",
-		"19 Oct 24",
-		"26 Oct 24",
-		"31 Oct 24",
-	],
-	datasets: [
-		{
-			label: "ICSI Normal Fertilization Rate",
-			backgroundColor: "transparent",
-			borderColor: "#00d4d4",
-			data: [
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				65,
-				75,
-				85,
-				80,
-				75,
-				70,
-				60,
-				55,
-			],
-			borderWidth: 2,
-			pointBackgroundColor: "#00d4d4",
-			pointBorderColor: "#00d4d4",
-		},
-		{
-			label: "Benchmark ≥ 80%",
-			backgroundColor: "transparent",
-			borderColor: "#ffffff",
-			data: Array(27).fill(80),
-			pointRadius: 0,
-			borderWidth: 1,
-		},
-		{
-			label: "Competency ≥ 65%",
-			backgroundColor: "transparent",
-			borderColor: "#ff4b4b",
-			data: Array(27).fill(65),
-			pointRadius: 0,
-			borderDash: [5, 5],
-			borderWidth: 1,
-		},
-	],
+// Status indicator color based on value
+const getStatusColor = computed(() => {
+	const numValue = parseFloat(value.value);
+	if (numValue < 20) return 'bg-green-500';
+	if (numValue >= 20 && numValue < 90) return 'bg-yellow-500';
+	return 'bg-red-500';
 });
+
+// Trend indicator (example - you can modify based on your needs)
+const getTrendIndicator = computed(() => {
+	const numValue = parseFloat(value.value);
+	const benchmark = parseFloat(props.benchmark.replace(/[^0-9.]/g, ''));
+	return numValue >= benchmark ? '+2.5%' : '-1.2%';
+});
+
+// Trend color
+const getTrendColor = computed(() => {
+	const numValue = parseFloat(value.value);
+	const benchmark = parseFloat(props.benchmark.replace(/[^0-9.]/g, ''));
+	return numValue >= benchmark ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
+});
+
 function showGraph(value) {
 	console.log("TT", props.title);
 	store.showGraph = true;
 	store.graphTitle = value;
 }
 </script>
+
+<style scoped>
+.backdrop-blur-xl {
+	-webkit-backdrop-filter: blur(20px);
+	backdrop-filter: blur(20px);
+}
+</style>
