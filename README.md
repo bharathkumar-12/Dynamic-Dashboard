@@ -199,10 +199,6 @@ The application uses Pinia for state management:
 - Export functionality for reports
 - Additional chart types and visualizations
 
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## 👏 Acknowledgments
 
 - Vue.js team for the amazing framework
